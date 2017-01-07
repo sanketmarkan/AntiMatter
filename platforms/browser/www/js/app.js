@@ -2,10 +2,8 @@ var cube, scene, camera, renderer, x;
 var cl=[], cv=[];
 var geometry, material, mesh, mesh2, mesh3;
 var group = new THREE.Object3D();
-<<<<<<< HEAD
 var rect = new THREE.Object3D(),cnt=0;
 var fl=[],cnt=0;
-=======
 var projector = new THREE.Projector();
 var mouseVector = new THREE.Vector3();
 var container = document.getElementsByClassName('app')[0];
@@ -15,7 +13,6 @@ console.log(containerHeight);
 var playervelocity_y = 0;
 var playervelocity_x = 0;
 var movingstate = 0;
->>>>>>> 69ece4852eaa3c00009d54c7ac8a1d264738e99d
 
 var main = function() {
 	init();
@@ -24,21 +21,7 @@ var main = function() {
 
 }
 
-<<<<<<< HEAD
 
-// $('.app').click(function (e){
-//     var elm = $(this);
-//     var xPos = e.pageX - elm.offset().left;
-//     var yPos = e.pageY - elm.offset().top;
-
-//     console.log(xPos, yPos);
-// });
-
-
-
-
-
-=======
 function moveup() {
 
 	movingstate = 1;
@@ -61,7 +44,6 @@ function moveright() {
 function statezero() {
 	movingstate = 0;
 }
->>>>>>> 58cd1fbf45e790c0f888366ea0ae2d038d939189
 function init() {
 	scene = new THREE.Scene();
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -78,7 +60,6 @@ function init() {
 	material = new THREE.MeshBasicMaterial( { color: 0x00009f, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add( mesh );
-<<<<<<< HEAD
 	
 	// geometry = new THREE.RingGeometry( 0.74, 0.8, 32 );
 	// material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
@@ -88,7 +69,6 @@ function init() {
 	group.position.set(0,0,0.01);
 	group.scale.set( 0.2, 0.2, 1 );
 		
-=======
 
 
 	for(var i=0;i<100;i++) {
@@ -108,10 +88,8 @@ function init() {
 		scene.add(cube);
 	}
 
->>>>>>> 58cd1fbf45e790c0f888366ea0ae2d038d939189
 	scene.add(group);
-	camera.position.z = 5;
-	// camera.position.x = -2.5;
+	camera.position.z = 3.5;
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
@@ -161,13 +139,11 @@ function onWindowResize(){
 }
 function render() {
 	requestAnimationFrame( render );
+	camera.position.x = group.position.x;
+	camera.position.y = group.position.y;
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
-<<<<<<< HEAD
-=======
-	// console.log(y,x);
->>>>>>> 69ece4852eaa3c00009d54c7ac8a1d264738e99d
 	group.remove(mesh2);
 	group.remove(mesh3);
 	geometry = new THREE.RingGeometry( z, 1.0, 32 );
@@ -180,7 +156,6 @@ function render() {
 	group.add( mesh2 );
 	group.add ( mesh3 );
 
-<<<<<<< HEAD
 	if(cnt%70==0) {
 		cv[cnt/70][0] = 0.01;
 		cv[cnt/70][1] = 0.01;
@@ -206,10 +181,8 @@ function render() {
 		}
 	}
 	cnt++;
-=======
 	group.position.x += playervelocity_x*(0.015);
 	group.position.y += playervelocity_y*(0.015);
->>>>>>> 69ece4852eaa3c00009d54c7ac8a1d264738e99d
 
 	renderer.render( scene, camera );
 }

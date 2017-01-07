@@ -89,8 +89,7 @@ function init() {
 	}
 
 	scene.add(group);
-	camera.position.z = 5;
-	// camera.position.x = -2.5;
+	camera.position.z = 3.5;
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
@@ -140,6 +139,8 @@ function onWindowResize(){
 }
 function render() {
 	requestAnimationFrame( render );
+	camera.position.x = group.position.x;
+	camera.position.y = group.position.y;
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
