@@ -33,11 +33,14 @@
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
+        <title>AntiMatter</title>
     </head>
     <body onload='main()'>
         <div class="app">
-            
+            <button id="up" onclick="moveup()" onmouseup="statezero()">Up</button>
+            <button id="down" onclick="movedown()" onmouseup="statezero()">Down</button>
+            <button id="right" onclick="moveright()" onmouseup="statezero()">Right</button>
+            <button id="left" onclick="moveleft()" onmouseup="statezero()">Left</button>
         </div>
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="js/three.min.js"></script>
