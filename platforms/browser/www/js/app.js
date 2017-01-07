@@ -5,8 +5,23 @@ var group = new THREE.Object3D();
 
 var main = function() {
 	init();
+	render_level();
 	render();
+
 }
+
+
+// $('.app').click(function (e){
+//     var elm = $(this);
+//     var xPos = e.pageX - elm.offset().left;
+//     var yPos = e.pageY - elm.offset().top;
+
+//     console.log(xPos, yPos);
+// });
+
+
+
+
 
 function init() {
 	scene = new THREE.Scene();
@@ -15,8 +30,6 @@ function init() {
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
-
-
 	geometry = new THREE.RingGeometry( 1, 1.25, 32 );
 	material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
@@ -31,11 +44,13 @@ function init() {
 	// material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
 	// mesh = new THREE.Mesh( geometry, material );
 	// group.add (mesh);
-	
-	
-	
+
+	group.position.set(0,0,0.01);
+	group.scale.set( 0.2, 0.2, 1 );
+		
 	scene.add(group);
 	camera.position.z = 5;
+	// camera.position.x = -2.5;
 
 
 }
