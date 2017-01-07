@@ -116,7 +116,7 @@ h1 {
 
 #up {
     position: fixed;
-    bottom:5%;
+    bottom:9%;
     left:6%;
 }
 
@@ -136,4 +136,9 @@ h1 {
     position: fixed;
     bottom: 2%;
     left:10%;
+}
+button{
+    opacity :0.6;
+    padding: 10px 10px;
+    border-radius: 40px;
 }

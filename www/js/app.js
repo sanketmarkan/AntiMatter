@@ -16,8 +16,11 @@ var movingstate = 0;
 
 var main = function() {
 	init();
+	render_level();
 	render();
+
 }
+
 
 function moveup() {
 
@@ -48,8 +51,6 @@ function init() {
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
-
-
 	geometry = new THREE.RingGeometry( 1, 1.25, 32 );
 	material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
@@ -59,10 +60,19 @@ function init() {
 	material = new THREE.MeshBasicMaterial( { color: 0x00009f, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add( mesh );
+	
+	// geometry = new THREE.RingGeometry( 0.74, 0.8, 32 );
+	// material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+	// mesh = new THREE.Mesh( geometry, material );
+	// group.add (mesh);
+
+	group.position.set(0,0,0.01);
+	group.scale.set( 0.2, 0.2, 1 );
+		
 
 
 	scene.add(group);
-	camera.position.z = 5;
+	camera.position.z = 3.5;
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
@@ -112,6 +122,8 @@ function onWindowResize(){
 }
 function render() {
 	requestAnimationFrame( render );
+	camera.position.x = group.position.x;
+	camera.position.y = group.position.y;
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
