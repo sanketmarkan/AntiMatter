@@ -3,11 +3,13 @@ var geometry, material, mesh, mesh2, mesh3;
 var group = new THREE.Object3D();
 var projector = new THREE.Projector();
 var mouseVector = new THREE.Vector3();
-var container = document.getElementsByClassName('app')[0]	;
+var container = document.getElementsByClassName('app')[0];
 var containerWidth = container.clientWidth;
 var containerHeight = container.clientHeight;
 console.log(containerHeight);
-
+var playervelocity_y = 0;
+var playervelocity_x = 0;
+var movingstate = 0;
 
 var main = function() {
 	init();
@@ -15,17 +17,26 @@ var main = function() {
 }
 
 function moveup() {
-	group.position.y += 1;
+
+	movingstate = 1;
+	playervelocity_y += 1;
 }
 function movedown() {
-	group.position.y -= 1;
+	movingstate = 2;
+	playervelocity_y -= 1;
 }
 function moveleft() {
-	group.position.x -= 1;
+	movingstate = 3;
+	playervelocity_x -= 1;
 
 }
 function moveright() {
-	group.position.x += 1;
+	movingstate = 4;
+	playervelocity_x += 1;	
+}
+
+function statezero() {
+	movingstate = 0;
 }
 function init() {
 	scene = new THREE.Scene();
@@ -119,6 +130,10 @@ function render() {
 	mesh3 = new THREE.Mesh( geometry, material );
 	group.add( mesh2 );
 	group.add ( mesh3 );
+
+	group.position.x += playervelocity_x*(0.015);
+	group.position.y += playervelocity_y*(0.015);
+
 	renderer.render( scene, camera );
 }
 
