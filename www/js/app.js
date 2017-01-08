@@ -17,10 +17,10 @@ var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
 var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
-
 var level_complete = 0, end_size = 0;
-var col, tt = 0, change_color = 0;
 var level = 1;
+var px,py,ex,ey;
+var col, tt = 0, change_color = 0,val = 100;
 var main = function() {
 	scene = new THREE.Scene();
 	renderer = new THREE.WebGLRenderer();
@@ -46,7 +46,6 @@ function movedown() {
 }
 function moveleft() {
 	movingstate = 3;
-	level_complete = 1;
 	playervelocity_x -= 1;
 
 }
@@ -109,7 +108,8 @@ function init() {
 	scene.add(group);
 	scene.add(portal);
 	scene.add(end);
-	camera.position.z = 5;
+	px=portal.position.x,py=portal.position.y,ex=end.position.x,ey=end.position.y;
+	camera.position.z = 3.5;
 
 	geometry = new THREE.RingGeometry( 0.2, 0.35, 32 );
 	material = new THREE.MeshBasicMaterial( { color: 0x47B8D8E, side: THREE.DoubleSide } );
@@ -239,12 +239,12 @@ function onWindowResize(){
 function render() {
 
 	requestAnimationFrame( render );
-	// camera.position.x = group.position.x;
-	// camera.position.y = group.position.y;
+	camera.position.x = group.position.x;
+	camera.position.y = group.position.y;
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
-	
+
 	if (change_color){
 		tt = 1-tt;
 		for( var i = group.children.length - 1; i >= 0; i--) { group.remove(group.children[i]);}
@@ -328,13 +328,18 @@ function render() {
 	}
 
 	if(cnt%270==0) {	// for adding a new square every second
-					var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
+				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v,cn:cnt};
 				cube.position.set(-4,2.8,0);
 				rect.add(cube);
+				$("#score").html(function()
+				{
+					val = val-1;
+					return "SCORE - " + val;
+				});
 
 		if(ass_x_v==0||ass_y_v==0)
 			fl_in_vel*=-1;
@@ -367,18 +372,32 @@ function render() {
 			rect.children[i].userData.vy = 0.1;
 		}
 		var tx = (rect.children[i].position.x-group.position.x),ty = (rect.children[i].position.y-group.position.y);
+		var te1=rect.children[i].position.x-4,te2=rect.children[i].position.y+2;
+		if(Math.sqrt(te1*te1+te2*te2)<0.4) {
+			level_complete = 1;
+			rect.remove(rect.children[i]);
+		}
+		var te1=group.position.x-ex,te2=group.position.y-ey;
+		if(level_complete && Math.sqrt(te1*te1+te2*te2)<0.2) {
+			console.log("complete");
+		}
 		if(playervelocity_y<0.01&&playervelocity_y>-0.01)
 			playervelocity_y = 0.01;
 			if(playervelocity_x<0.01&&playervelocity_x>-0.01)
 				playervelocity_x = 0.01;
 		if(tx*tx+ty*ty < 0.2) {
-			tot = 0.015;
-			rect.children[i].userData.vx = tot*(playervelocity_x)/(playervelocity_x+playervelocity_y);
-			rect.children[i].userData.vy = tot*(playervelocity_y)/(playervelocity_x+playervelocity_y);
-			if(playervelocity_y<0)
-				rect.children[i].userData.vy*=-1;
-			if(playervelocity_x<0)
-				rect.children[i].userData.vx*=-1;
+			if(tt==0) {
+				rect.remove(rect.children[i]);
+			}
+			else {
+				tot = 0.015;
+				rect.children[i].userData.vx = tot*(playervelocity_x)/(playervelocity_x+playervelocity_y);
+				rect.children[i].userData.vy = tot*(playervelocity_y)/(playervelocity_x+playervelocity_y);
+				if(playervelocity_y<0)
+					rect.children[i].userData.vy*=-1;
+				if(playervelocity_x<0)
+					rect.children[i].userData.vx*=-1;
+			}
 		}
 	}
 	if(cnt%1000==0) {
