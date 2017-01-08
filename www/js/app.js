@@ -128,7 +128,7 @@ function onMouseMove(e){
 	     var caster2 = new THREE.Raycaster();
 	     var collisions,coll2
 	      // Maximum distance from the origin before we consider collision
-	      distance = 0.2;
+	      distance = 0.5;
 	      // Get the obstacles array from our world
 	    // For each ray
 	    for (var i = 0; i < rays.length; i++) {
@@ -148,25 +148,27 @@ function onMouseMove(e){
 				  	// console.log(playervelocity_x);
 				}
 		}
-	   //  for (var i = 0; i < rays.length; i++)
-	   //    {
-	   //    	for(var j = 0;j<rect.children.length;j++)
-	   //    	{// We reset the raycaster to this direction
-	   //    		caster2.set(rect.children[j].position,rays[i]);
-	   //    		// Test if we intersect with any obstacle mesh
-				//   coll2 = caster2.intersectObjects(collisionobjects);
-				//   // And disable that direction if we do
-				//   if (coll2.length > 0 && coll2[0].distance <= distance) {
-				// 		rect.children[j].position.x -= 0.1*rect.children[j].userData.vx;
-				// 		rect.children[j].position.y -= 0.1*rect.children[j].userData.vy;
-				// 	  	// console.log("HIT BLOCK!");
-				// 	  	// console.log(playervelocity_x);
-				// 	  	rect.children[j].userData.vx = -rect.children[j].userData.vx;
-				// 	  	rect.children[j].userData.vy = -rect.children[j].userData.vy;
-				// 	  	// console.log(rect.children[j].userData.vy);
-			 //      }
-		  // 	}
-		  // }
+	    for (var i = 0; i < rays.length; i++)
+	      {
+	      	for(var j = 0;j<rect.children.length;j++)
+	      	{// We reset the raycaster to this direction
+	      		caster2.set(rect.children[j].position,rays[i]);
+	      		// Test if we intersect with any obstacle mesh
+				  coll2 = caster2.intersectObjects(collisionobjects);
+				  // And disable that direction if we do
+				  if (coll2.length > 0 && coll2[0].distance <= distance) {
+
+						rect.children[j].position.x -= 20*rect.children[j].userData.vx;
+						rect.children[j].position.y -= 20*rect.children[j].userData.vy;
+					  	console.log("HIT BLOCK!");
+					  	// console.log(playervelocity_x);
+					  	var t = rect.children[j].userData.vx; 
+					  	rect.children[j].userData.vx = -rect.children[j].userData.vy;
+					  	rect.children[j].userData.vy = t;
+					  	// console.log(rect.children[j].userData.vy);
+			      }
+		  	}
+		  }
 	    
 	}
 
@@ -213,22 +215,22 @@ function render() {
 	}
 
 	if(cnt%70==0) {	// for adding a new square every second
-		geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
-		material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-		cube = new THREE.Mesh( geometry, material );
-		cube.userData = {vx:ass_x_v,vy:ass_y_v};
-		cube.position.set(-4,2.8,0);
-		rect.add(cube);
+				var geometry = new THREE.CircleGeometry( 0.2, 32 );
+				var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+				var circle = new THREE.Mesh( geometry, material ); 
+				circle.userData = {vx:ass_x_v,vy:ass_y_v};
+				circle.position.set(-4,2.8,0);
+				rect.add(circle);
 
 		if(ass_x_v==0||ass_y_v==0)
 			fl_in_vel*=-1;
-		geometry = new THREE.CubeGeometry( 0.2, 0.2, 0.02 );
-		material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-		cube = new THREE.Mesh( geometry, material );
-		cube.userData = {vx:ass_x_v,vy:ass_y_v};
-		cube.position.set(-4,2.8,0);
-		rect.add(cube);
-
+				// var geometry = new THREE.CircleGeometry( 0.2, 32 );
+				// var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+				// var circle = new THREE.Mesh( geometry, material ); 
+				// circle.userData = {vx:ass_x_v,vy:ass_y_v};
+				// circle.position.set(-4,2.8,0);
+				// rect.add(circle);
+		
 		ass_x_v += fl_in_vel;
 		ass_y_v += fl_in_vel;
 	}
@@ -245,12 +247,12 @@ function render() {
 			rect.children[i].userData.vy += 0.000003;
 		rect.children[i].rotation.z += 0.01;
 	}
+	check_collision();
 	scene.add(rect);
 	cnt++;
 	group.position.x += playervelocity_x*(0.015);
 	group.position.y += playervelocity_y*(0.015);
 	renderer.render( scene, camera );
-	check_collision();
 	for(var i=0;i<rect.children.length;i++) {
 		scene.remove(rect.children[i]);
 	}
