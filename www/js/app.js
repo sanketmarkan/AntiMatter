@@ -31,7 +31,7 @@ var main = function() {
 	init();
 	if(level==1) render_level();
 	if(level==2) render_level_2();
-	create_portal();
+	create_portal(level)
 	create_end();
 	render();
 }
@@ -103,7 +103,8 @@ function init() {
 	// mesh = new THREE.Mesh( geometry, material );
 	// group.add (mesh);
 
-	group.position.set(-4,0.8,0.01);
+	if(level==1) group.position.set(-4,0.8,0.01);
+	else group.position.set(0,1,0.01);
 	group.scale.set( 0.2, 0.2, 1 );
 
 
@@ -117,13 +118,15 @@ function init() {
 	geometry = new THREE.RingGeometry( 0.2, 0.35, 32 );
 	material = new THREE.MeshBasicMaterial( { color: 0x47B8D8E, side: THREE.DoubleSide } );
 	var spawn = new THREE.Mesh( geometry, material );
-	spawn.position.set(-3.95,2.6,0);
+	if(level==1) spawn.position.set(-3.95,2.6,0);
+	else spawn.position.set(-3.95,-2.6,0);
 	scene.add(spawn);
 
 	var geometry = new THREE.CircleGeometry( 0.17, 32 );
 	var material = new THREE.MeshBasicMaterial( { color: 0x44B3C2 } );
 	var circle = new THREE.Mesh( geometry, material );
-	circle.position.set(-3.95,2.6,0);
+	if(level==1) circle.position.set(-3.95,2.6,0);
+	else circle.position.set(-3.95,-2.6,0);
 	scene.add( circle );
 
 }
@@ -407,12 +410,16 @@ function render() {
 		end.add(line_end);
 	}
 
+	if(level_complete && group.position.x<=0.1 && group.position.y<=0.1) {
+		changelevel = 1;
+	}
+
 	if(changelevel) {
 		level++;
 		if(level==2){
 			laserobjects = [];
 			init();
-			if(level==2) render_level_2();
+			render_level_2();
 			create_portal();
 			create_end();
 			render();
@@ -426,7 +433,8 @@ function render() {
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v,mat:(cnt/270)%2};
-				cube.position.set(-4,2.8,0);
+				if(level==1) cube.position.set(-4,2.8,0);
+				else cube.position.set(-3.95,-2.6,0);
 				rect.add(cube);
 				$("#score").html(function()
 				{
@@ -445,7 +453,8 @@ function render() {
 
 				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v,mat:(cnt/270)%2};
-				cube.position.set(-4,2.8,0);
+				if(level==1) cube.position.set(-4,2.8,0);
+				else cube.position.set(-3.95,-2.6,0);
 				rect.add(cube);
 		ass_x_v += fl_in_vel;
 		ass_y_v += fl_in_vel;
@@ -498,12 +507,13 @@ function render() {
 			}
 		}
 	}
+	scene.remove(rect);
 	if(cnt%4000==0) {
 		rect.remove(rect.children[0]);
 		rect.remove(rect.children[0]);
 	}
 	scene.add(rect);
-	cnt++;
+	cnt = (cnt+1)%1000;
 	group.position.x += playervelocity_x*(0.015);
 	group.position.y += playervelocity_y*(0.015);
 	renderer.render( scene, camera );
