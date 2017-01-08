@@ -5,7 +5,7 @@ function render_level() {
 	scene.add (mesh);
 	levelobj.push(mesh);
 	var geom = new THREE.Geometry();
-	var v1 = new THREE.Vector3(-2.5,-3.5,0);
+	var v1 = new THREE.Vector3(0,-3.5,0);
 	var v2 = new THREE.Vector3(-6,-1,0);
 	var v3 = new THREE.Vector3(-6,-3.5,0);
 	geom.vertices.push(v1);
@@ -13,21 +13,23 @@ function render_level() {
 	geom.vertices.push(v3);
 	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
 	geom.computeFaceNormals();
-	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
+	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide}) );
 	scene.add (mesh);
 	collisionobjects.push(mesh);
+
 	geom = new THREE.Geometry();
 	v1 = new THREE.Vector3(-3.5,-3.5,0);
 	v2 = new THREE.Vector3(-6,-3.5,0);
-	v3 = new THREE.Vector3(-6,1,0);
+	v3 = new THREE.Vector3(-6,2,0);
 	geom.vertices.push(v1);
 	geom.vertices.push(v2);
 	geom.vertices.push(v3);
 	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
 	geom.computeFaceNormals();
-	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
+	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide}) );
 	scene.add (mesh);
 	collisionobjects.push(mesh);
+
 	geom = new THREE.Geometry();
 	v1 = new THREE.Vector3(-4,3.5,0);
 	v2 = new THREE.Vector3(-6,3.5,0);
@@ -37,36 +39,36 @@ function render_level() {
 	geom.vertices.push(v3);
 	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
 	geom.computeFaceNormals();
-	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
+	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide}) );
 	scene.add (mesh);
 	collisionobjects.push(mesh);
 
 
 	geom = new THREE.Geometry();
 	v1 = new THREE.Vector3(0,3.5,0);
-	v2 = new THREE.Vector3(-3.5,3.5,0);
+	v2 = new THREE.Vector3(-4,3.5,0);
 	v3 = new THREE.Vector3(-1.5,0,0);
 	geom.vertices.push(v1);
 	geom.vertices.push(v2);
 	geom.vertices.push(v3);
 	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
 	geom.computeFaceNormals();
-	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
+	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x990000, side: THREE.DoubleSide}) );
 	scene.add (mesh);
 	collisionobjects.push(mesh);
 
-	geom = new THREE.Geometry();
-	v1 = new THREE.Vector3(-1.5,3.5,0);
-	v2 = new THREE.Vector3(-3.5,3.5,0);
-	v3 = new THREE.Vector3(-1.5,1.5,0);
-	geom.vertices.push(v1);
-	geom.vertices.push(v2);
-	geom.vertices.push(v3);
-	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
-	geom.computeFaceNormals();
-	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
-	scene.add (mesh);
-	collisionobjects.push(mesh);
+	// geom = new THREE.Geometry();
+	// v1 = new THREE.Vector3(-1.5,3.5,0);
+	// v2 = new THREE.Vector3(-3.5,3.5,0);
+	// v3 = new THREE.Vector3(-1.5,1.5,0);
+	// geom.vertices.push(v1);
+	// geom.vertices.push(v2);
+	// geom.vertices.push(v3);
+	// geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
+	// geom.computeFaceNormals();
+	// mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x001100, side: THREE.DoubleSide}) );
+	// scene.add (mesh);
+	// collisionobjects.push(mesh);
 
 	geom = new THREE.Geometry();
 	v1 = new THREE.Vector3(-2,-3.5,0);
@@ -77,20 +79,46 @@ function render_level() {
 	geom.vertices.push(v3);
 	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
 	geom.computeFaceNormals();
-	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
+	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000099, side: THREE.DoubleSide}) );
 	scene.add (mesh);
 	collisionobjects.push(mesh);
 
 	geom = new THREE.Geometry();
-	v1 = new THREE.Vector3(1,3.5,0);
-	v2 = new THREE.Vector3(5,3.5,0);
+	v1 = new THREE.Vector3(-2,-3.5,0);
+	v2 = new THREE.Vector3(6,-3.5,0);
+	v3 = new THREE.Vector3(1,-1.5,0);
+	geom.vertices.push(v1);
+	geom.vertices.push(v2);
+	geom.vertices.push(v3);
+	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
+	geom.computeFaceNormals();
+	mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000099, side: THREE.DoubleSide}) );
+	scene.add (mesh);
+	collisionobjects.push(mesh);
+
+	geom = new THREE.Geometry();
+	v1 = new THREE.Vector3(-3.5,3.5,0);
+	v2 = new THREE.Vector3(6,3.5,0);
 	v3 = new THREE.Vector3(4,1.5,0);
 	geom.vertices.push(v1);
 	geom.vertices.push(v2);
 	geom.vertices.push(v3);
 	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
 	geom.computeFaceNormals();
-	var mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
+	var mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x999999, side: THREE.DoubleSide}) );
+	scene.add (mesh);
+	collisionobjects.push(mesh);
+
+	geom = new THREE.Geometry();
+	v1 = new THREE.Vector3(6,-3.5,0);
+	v2 = new THREE.Vector3(6,3.5,0);
+	v3 = new THREE.Vector3(4,1.5,0);
+	geom.vertices.push(v1);
+	geom.vertices.push(v2);
+	geom.vertices.push(v3);
+	geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
+	geom.computeFaceNormals();
+	var mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x999999, side: THREE.DoubleSide}) );
 	scene.add (mesh);
 	collisionobjects.push(mesh);
 

@@ -67,7 +67,7 @@ function init() {
 	// mesh = new THREE.Mesh( geometry, material );
 	// group.add (mesh);
 
-	group.position.set(0,0,0.01);
+	group.position.set(-4,2.8,0.01);
 	group.scale.set( 0.2, 0.2, 1 );
 
 
