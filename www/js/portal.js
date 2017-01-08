@@ -32,5 +32,5 @@ function create_portal() {
 	var cube = new THREE.Mesh( geometry, material );
 	cube.position.set(0,-0.2,0.001);
 	portal.add(cube);
-	portal.position.set(4,-2,0);
+	portal.position.set(4.5,-2,0);
 }
