@@ -79,7 +79,7 @@ function init() {
 	// mesh = new THREE.Mesh( geometry, material );
 	// group.add (mesh);
 
-	group.position.set(-4,2.8,0.01);
+	group.position.set(-4,0.8,0.01);
 	group.scale.set( 0.2, 0.2, 1 );
 
 
@@ -88,6 +88,18 @@ function init() {
 	scene.add(portal);
 	scene.add(end);
 	camera.position.z = 3.5;
+
+	geometry = new THREE.RingGeometry( 0.2, 0.35, 32 );
+	material = new THREE.MeshBasicMaterial( { color: 0x47B8D8E, side: THREE.DoubleSide } );
+	var spawn = new THREE.Mesh( geometry, material );
+	spawn.position.set(-3.95,2.6,0);
+	scene.add(spawn);
+
+	var geometry = new THREE.CircleGeometry( 0.17, 32 );
+	var material = new THREE.MeshBasicMaterial( { color: 0x44B3C2 } );
+	var circle = new THREE.Mesh( geometry, material );
+	circle.position.set(-3.95,2.6,0);
+	scene.add( circle );
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
@@ -159,7 +171,7 @@ function onMouseMove(e){
 	      // Test if we intersect with any obstacle mesh
 	      collisions = caster.intersectObjects(collisionobjects);
 
-	      if (collisions.length > 0 && collisions[0].distance <= distance) 
+	      if (collisions.length > 0 && collisions[0].distance <= distance)
 	      		{
 					group.position.x -= 0.1*playervelocity_x;
 					group.position.y -= 0.1*playervelocity_y;
@@ -184,14 +196,14 @@ function onMouseMove(e){
 						rect.children[j].position.y -= 20*rect.children[j].userData.vy;
 					  	console.log("HIT BLOCK!");
 					  	// console.log(playervelocity_x);
-					  	var t = rect.children[j].userData.vx; 
+					  	var t = rect.children[j].userData.vx;
 					  	rect.children[j].userData.vx = -rect.children[j].userData.vy;
 					  	rect.children[j].userData.vy = t;
 					  	// console.log(rect.children[j].userData.vy);
 			      }
 		  	}
 		  }
-	    
+
 	}
 
 function onWindowResize(){
@@ -252,7 +264,6 @@ function render() {
 			else
 				playervelocity_x += 0.02;
 	}
-
 	if(level_complete) {
 		end.remove(line_end);
 		end_size += 0.03;
@@ -286,8 +297,9 @@ function render() {
 
 	if(cnt%70==0) {	// for adding a new square every second
 					var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
+				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-				var cube = new THREE.Mesh( geometry, material ); 
+				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v};
 				cube.position.set(-4,2.8,0);
 				rect.add(cube);
@@ -296,10 +308,10 @@ function render() {
 			fl_in_vel*=-1;
 				var geometry = new THREE.CubeGeometry( 0.2, 0.2, 0.02 );
 				var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-				var cube = new THREE.Mesh( geometry, material ); 
+				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v};
 				cube.position.set(-4,2.8,0);
-				rect.add(cube);		
+				rect.add(cube);
 		ass_x_v += fl_in_vel;
 		ass_y_v += fl_in_vel;
 	}
@@ -317,6 +329,26 @@ function render() {
 		rect.children[i].rotation.z += 0.01;
 	}
 	check_collision();
+	for(var i=0;i<rect.children.length;i++) {
+		if(rect.children[i].userData.vx>0.2||rect.children[i].userData.vy>0.2||rect.children[i].userData.vx<-0.2||rect.children[i].userData.vy<-0.2) {
+			rect.children[i].userData.vx = 0.1;
+			rect.children[i].userData.vy = 0.1;
+		}
+		var tx = (rect.children[i].position.x-group.position.x),ty = (rect.children[i].position.y-group.position.y);
+		if(playervelocity_y<0.01&&playervelocity_y>-0.01)
+			playervelocity_y = 0.01;
+			if(playervelocity_x<0.01&&playervelocity_x>-0.01)
+				playervelocity_x = 0.01;
+		if(tx*tx+ty*ty < 0.2) {
+			tot = 0.015;
+			rect.children[i].userData.vx = tot*(playervelocity_x)/(playervelocity_x+playervelocity_y);
+			rect.children[i].userData.vy = tot*(playervelocity_y)/(playervelocity_x+playervelocity_y);
+			if(playervelocity_y<0)
+				rect.children[i].userData.vy*=-1;
+			if(playervelocity_x<0)
+				rect.children[i].userData.vx*=-1;
+		}
+	}
 	scene.add(rect);
 	cnt++;
 	group.position.x += playervelocity_x*(0.015);
