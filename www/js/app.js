@@ -215,22 +215,21 @@ function render() {
 	}
 
 	if(cnt%70==0) {	// for adding a new square every second
-				var geometry = new THREE.CircleGeometry( 0.2, 32 );
-				var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-				var circle = new THREE.Mesh( geometry, material ); 
-				circle.userData = {vx:ass_x_v,vy:ass_y_v};
-				circle.position.set(-4,2.8,0);
-				rect.add(circle);
+				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
+				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+				var cube = new THREE.Mesh( geometry, material ); 
+				cube.userData = {vx:ass_x_v,vy:ass_y_v};
+				cube.position.set(-4,2.8,0);
+				rect.add(cube);
 
 		if(ass_x_v==0||ass_y_v==0)
 			fl_in_vel*=-1;
-				// var geometry = new THREE.CircleGeometry( 0.2, 32 );
-				// var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-				// var circle = new THREE.Mesh( geometry, material ); 
-				// circle.userData = {vx:ass_x_v,vy:ass_y_v};
-				// circle.position.set(-4,2.8,0);
-				// rect.add(circle);
-		
+				var geometry = new THREE.CubeGeometry( 0.2, 0.2, 0.02 );
+				var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+				var cube = new THREE.Mesh( geometry, material ); 
+				cube.userData = {vx:ass_x_v,vy:ass_y_v};
+				cube.position.set(-4,2.8,0);
+				rect.add(cube);		
 		ass_x_v += fl_in_vel;
 		ass_y_v += fl_in_vel;
 	}
