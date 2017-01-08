@@ -18,16 +18,21 @@ var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
 var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 
-var blue_portal = new THREE.Vector3(1,0.2,0);
 var level_complete = 0, end_size = 0;
 var col, tt = 0, change_color = 0;
+var level = 1;
 var main = function() {
+	scene = new THREE.Scene();
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	document.body.appendChild( renderer.domElement );
 	init();
-	render_level();
+	if(level==1) render_level();
+	if(level==2) render_level_2();
 	create_portal();
 	create_end();
 	render();
-
 }
 
 
@@ -58,13 +63,29 @@ function change() {
 	change_color = 1;
 }
 function init() {
-	scene = new THREE.Scene();
+
+
+	cl=[], cv=[];
+	group = new THREE.Object3D();
+	line_end = new THREE.Object3D();
+	end = new THREE.Object3D();
+	portal = new THREE.Object3D();
+	rect = new THREE.Object3D(),cnt=0;
+	fl=[],cnt=0;
+	projector = new THREE.Projector();
+	playervelocity_y = 0;
+	playervelocity_x = 0;
+	collisionobjects = [],levelobj = [];
+	rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
+
+	if(scene) {
+		for(var i = scene.children.length-1;i>=0;i--){
+			scene.remove(scene.children[i]);
+		}
+	}
+
 	col = [0xff0000,0x0000ff];
-	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	x=0;
-	renderer = new THREE.WebGLRenderer();
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	document.body.appendChild( renderer.domElement );
 	geometry = new THREE.RingGeometry( 1, 1.25, 32 );
 	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
@@ -88,7 +109,7 @@ function init() {
 	scene.add(group);
 	scene.add(portal);
 	scene.add(end);
-	camera.position.z = 3.5;
+	camera.position.z = 5;
 
 	geometry = new THREE.RingGeometry( 0.2, 0.35, 32 );
 	material = new THREE.MeshBasicMaterial( { color: 0x47B8D8E, side: THREE.DoubleSide } );
@@ -218,8 +239,8 @@ function onWindowResize(){
 function render() {
 
 	requestAnimationFrame( render );
-	camera.position.x = group.position.x;
-	camera.position.y = group.position.y;
+	// camera.position.x = group.position.x;
+	// camera.position.y = group.position.y;
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
@@ -294,6 +315,16 @@ function render() {
 		line = new THREE.LineSegments( geometry, material );
 		line_end.add(line);
 		end.add(line_end);
+
+		level++;
+		if(level==2){
+			init();
+			if(level==1) render_level();
+			if(level==2) render_level_2();
+			create_portal();
+			create_end();
+			render();
+		}
 	}
 
 	if(cnt%270==0) {	// for adding a new square every second
