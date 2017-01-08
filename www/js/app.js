@@ -60,6 +60,7 @@ function change() {
 function init() {
 	scene = new THREE.Scene();
 	col = [0xff0000,0x0000ff];
+	document.getElementById('trigger-activate-audio').play();
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	x=0;
 	renderer = new THREE.WebGLRenderer();
@@ -177,6 +178,7 @@ function onMouseMove(e){
 					group.position.x -= 0.1*playervelocity_x;
 					group.position.y -= 0.1*playervelocity_y;
 				  	console.log("HIT!");
+				  	document.getElementById('destroy').play();
 				  	// console.log(playervelocity_x);
 				  	playervelocity_x = -playervelocity_x;
 				  	playervelocity_y = -playervelocity_y;
@@ -196,6 +198,7 @@ function onMouseMove(e){
 						rect.children[j].position.x -= 20*rect.children[j].userData.vx;
 						rect.children[j].position.y -= 20*rect.children[j].userData.vy;
 					  	console.log("HIT BLOCK!");
+					  	document.getElementById('destroy').play();
 					  	// console.log(playervelocity_x);
 					  	var t = rect.children[j].userData.vx;
 					  	rect.children[j].userData.vx = -rect.children[j].userData.vy;
@@ -266,6 +269,7 @@ function render() {
 				playervelocity_x += 0.02;
 	}
 	if(level_complete) {
+		document.getElementById('gateopen').play();
 		end.remove(line_end);
 		end_size += 0.03;
 		end_size = Math.min(end_size, 0.8);
