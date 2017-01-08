@@ -67,13 +67,25 @@ function init() {
 	// mesh = new THREE.Mesh( geometry, material );
 	// group.add (mesh);
 
-	group.position.set(-4,2.8,0.01);
+	group.position.set(-4,0.8,0.01);
 	group.scale.set( 0.2, 0.2, 1 );
 
 
 
 	scene.add(group);
 	camera.position.z = 3.5;
+
+	geometry = new THREE.RingGeometry( 0.2, 0.35, 32 );
+	material = new THREE.MeshBasicMaterial( { color: 0x47B8D8E, side: THREE.DoubleSide } );
+	var spawn = new THREE.Mesh( geometry, material );
+	spawn.position.set(-3.95,2.6,0);
+	scene.add(spawn);
+
+	var geometry = new THREE.CircleGeometry( 0.17, 32 );
+	var material = new THREE.MeshBasicMaterial( { color: 0x44B3C2 } );
+	var circle = new THREE.Mesh( geometry, material );
+	circle.position.set(-3.95,2.6,0);
+	scene.add( circle );
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
