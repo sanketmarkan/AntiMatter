@@ -2,6 +2,9 @@ var cube, scene, camera, renderer, x;
 var cl=[], cv=[];
 var geometry, material, mesh, mesh2, mesh3;
 var group = new THREE.Object3D();
+var line_end = new THREE.Object3D();
+var end = new THREE.Object3D();
+var portal = new THREE.Object3D();
 var rect = new THREE.Object3D(),cnt=0;
 var fl=[],cnt=0;
 var projector = new THREE.Projector();
@@ -15,16 +18,20 @@ var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
 var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 
+var blue_portal = new THREE.Vector3(1,0.2,0);
+var level_complete = 0, end_size = 0;
+var col, tt = 0, change_color = 0;
 var main = function() {
 	init();
 	render_level();
+	create_portal();
+	create_end();
 	render();
 
 }
 
 
 function moveup() {
-
 	movingstate = 1;
 	playervelocity_y += 1;
 }
@@ -34,6 +41,7 @@ function movedown() {
 }
 function moveleft() {
 	movingstate = 3;
+	level_complete = 1;
 	playervelocity_x -= 1;
 
 }
@@ -45,15 +53,20 @@ function moveright() {
 function statezero() {
 	movingstate = 0;
 }
+
+function change() {
+	change_color = 1;
+}
 function init() {
 	scene = new THREE.Scene();
+	col = [0xff0000,0x00009f];
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	x=0;
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 	geometry = new THREE.RingGeometry( 1, 1.25, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add(mesh);
 
@@ -73,7 +86,21 @@ function init() {
 
 
 	scene.add(group);
+	scene.add(portal);
+	scene.add(end);
 	camera.position.z = 3.5;
+
+	geometry = new THREE.RingGeometry( 0.2, 0.35, 32 );
+	material = new THREE.MeshBasicMaterial( { color: 0x47B8D8E, side: THREE.DoubleSide } );
+	var spawn = new THREE.Mesh( geometry, material );
+	spawn.position.set(-3.95,2.6,0);
+	scene.add(spawn);
+
+	var geometry = new THREE.CircleGeometry( 0.17, 32 );
+	var material = new THREE.MeshBasicMaterial( { color: 0x44B3C2 } );
+	var circle = new THREE.Mesh( geometry, material );
+	circle.position.set(-3.95,2.6,0);
+	scene.add( circle );
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
@@ -121,7 +148,15 @@ function onMouseMove(e){
 	      new THREE.Vector3(0, 0, -1),
 	      new THREE.Vector3(-1, 0, -1),
 	      new THREE.Vector3(-1, 0, 0),
-	      new THREE.Vector3(-1, 0, 1)
+	      new THREE.Vector3(-1, 0, 1),
+	      new THREE.Vector3(0, 1, 1),
+	      new THREE.Vector3(1, 1, 1),
+	      new THREE.Vector3(1, 1, 0),
+	      new THREE.Vector3(1, 1, -1),
+	      new THREE.Vector3(0, 1, -1),
+	      new THREE.Vector3(-1, 1, -1),
+	      new THREE.Vector3(-1, 1, 0),
+	      new THREE.Vector3(-1, 1, 1),
 	    ];
 	    // And the "RayCaster", able to test for intersections
 	     var caster = new THREE.Raycaster();
@@ -188,17 +223,34 @@ function render() {
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
+	
+	if (change_color){
+		tt = 1-tt;
+		for( var i = group.children.length - 1; i >= 0; i--) { group.remove(group.children[i]);}
+		geometry = new THREE.RingGeometry( 1, 1.25, 32 );
+		material = new THREE.MeshBasicMaterial( { color: col[tt], side: THREE.DoubleSide } );
+		mesh = new THREE.Mesh( geometry, material );
+		group.add(mesh);
+
+		geometry = new THREE.RingGeometry( 0.001, 0.9, 32 );
+		material = new THREE.MeshBasicMaterial( { color: col[1-tt], side: THREE.DoubleSide } );
+		mesh = new THREE.Mesh( geometry, material );
+		group.add( mesh );
+		change_color  = 0;
+	}
+
 	group.remove(mesh2);
 	group.remove(mesh3);
 	geometry = new THREE.RingGeometry( z, 1.0, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: col[tt], side: THREE.DoubleSide } );
 	mesh2 = new THREE.Mesh( geometry, material );
 	group.add( mesh );
 	geometry = new THREE.RingGeometry( y, 1.2499, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: col[tt], side: THREE.DoubleSide } );
 	mesh3 = new THREE.Mesh( geometry, material );
 	group.add( mesh2 );
 	group.add ( mesh3 );
+
 
 	if(cnt%10) {	//for controlling the player's velocity
 		if(playervelocity_y>=0.02||playervelocity_y<=-0.02)
@@ -213,8 +265,39 @@ function render() {
 			else
 				playervelocity_x += 0.02;
 	}
+	if(level_complete) {
+		end.remove(line_end);
+		end_size += 0.03;
+		end_size = Math.min(end_size, 0.8);
 
-	if(cnt%370==0) {	// for adding a new square every second
+		material = new THREE.LineBasicMaterial({
+			color: 0x000000,
+			linewidth: 5
+		});
+		geometry = new THREE.Geometry();
+		geometry.vertices.push(
+			new THREE.Vector3( end_size, 0.8, 0.005 ),
+			new THREE.Vector3( end_size, -0.8, 0.005 )
+		);
+		line = new THREE.LineSegments( geometry, material );
+		line_end.add(line);
+
+		material = new THREE.LineBasicMaterial({
+			color: 0x000000,
+			linewidth: 5
+		});
+		geometry = new THREE.Geometry();
+		geometry.vertices.push(
+			new THREE.Vector3( -end_size, 0.8, 0.005 ),
+			new THREE.Vector3( -end_size, -0.8, 0.005 )
+		);
+		line = new THREE.LineSegments( geometry, material );
+		line_end.add(line);
+		end.add(line_end);
+	}
+
+	if(cnt%270==0) {	// for adding a new square every second
+					var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var cube = new THREE.Mesh( geometry, material );
