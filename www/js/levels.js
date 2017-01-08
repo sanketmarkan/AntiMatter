@@ -134,7 +134,7 @@ function render_level() {
 
 
 	var material = new THREE.LineBasicMaterial({
-	color: 0x0000ff,
+	color: 0xffffff,
 	linewidth: 3
 	});
 
@@ -155,7 +155,7 @@ function render_level() {
 	scene.add( line );
 
 	material = new THREE.LineBasicMaterial({
-	color: 0x0000ff,
+	color: 0xffffff,
 	linewidth: 3
 	});
 
