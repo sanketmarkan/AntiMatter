@@ -19,7 +19,7 @@ var collisionobjects = [],levelobj = [];
 var laserobjects = [];
 var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 var level_complete = 0, end_size = 0;
-var level = 1;
+var level = 2;
 var px,py,ex,ey;
 var col, tt = 0, change_color = 0,val = 100,changelevel=0;
 var main = function() {

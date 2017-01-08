@@ -134,28 +134,14 @@ function render_level() {
 
 
 	var material = new THREE.LineBasicMaterial({
-	color: 0xffffff,
+	color: 0x0000ff,
 	linewidth: 3
 	});
 
-	var geometry = new THREE.Geometry();
-	geometry.vertices.push(
-		new THREE.Vector3( 4, 1.5, 0 ),
-		new THREE.Vector3( 4, -2.7, 0 )
-	);
 
-	var line = new THREE.LineSegments( geometry, material );
-	line.direction = 0;
-	line.permanentx1 = 4;
-	line.permanenty1 = 1.5;
-
-	line.permanentx2= 4;
-	line.permanenty2 = -2.7;
-	laserobjects.push(line);
-	scene.add( line );
 
 	material = new THREE.LineBasicMaterial({
-	color: 0xffffff,
+	color: 0xff0000,
 	linewidth: 3
 	});
 
@@ -172,6 +158,7 @@ function render_level() {
 
 	line.permanentx2= -1.5;
 	line.permanenty2 = -2.85;
+	line.red = 1;
 	laserobjects.push(line);
 	scene.add( line );
 	// laserobjects.push(line);

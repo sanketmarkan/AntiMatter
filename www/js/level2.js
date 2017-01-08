@@ -67,4 +67,48 @@ function render_level_2() {
 	var mesh= new THREE.Mesh( geom, new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide}) );
 	scene.add (mesh);
 	collisionobjects.push(mesh);
+
+
+	geometry = new THREE.Geometry();
+
+	material = new THREE.LineBasicMaterial({
+	color: 0xff0000,
+	linewidth: 3
+	});
+	geometry.vertices.push(
+		new THREE.Vector3( -2.5, 3.5, 0 ),
+		new THREE.Vector3( -2.5, -3.5, 0 )
+	);
+
+	line = new THREE.LineSegments( geometry, material );
+	line.direction = 1;
+	line.permanentx1 = -2.5;
+	line.permanenty1 = 3.5;
+
+	line.permanentx2= -2.5;
+	line.permanenty2 = -3.5;
+	laserobjects.push(line);
+	scene.add( line );
+
+	material = new THREE.LineBasicMaterial({
+		color: 0xff0000,
+		linewidth: 3
+		});
+
+	geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3( 2.5, 3.5, 0 ),
+		new THREE.Vector3( 2.5, -3.5, 0 )
+	);
+
+	line = new THREE.LineSegments( geometry, material );
+	line.direction = 1;
+	line.permanentx1 = 2.5;
+	line.permanenty1 = 3.5;
+
+	line.permanentx2= 2.5;
+	line.permanenty2 = -3.5;
+	laserobjects.push(line);
+	scene.add( line );
+
 }
