@@ -43,6 +43,11 @@
             <button id="left" onclick="moveleft()" onmouseup="statezero()">←</button>
             <button id="change" onclick="change()" onmouseup="statezero()"></button>
             <h2 id="score">SCORE</h2> 
+            <audio id="trigger-activate-audio" src="sounds/activate.mp3" type="audio/mpeg" preload="auto"></audio>
+            <audio id="gameplay" src="sounds/gameplay.wav" type="audio/mpeg" preload="auto"></audio>
+            <audio id="gateopen" src="sounds/gateopen.wav" type="audio/mpeg" preload="auto"></audio>
+            <audio id="destroy" src="sounds/destroy.wav" type="audio/mpeg" preload="auto"></audio>
+
         </div>
         <script src="js/jquery-3.1.1.min.js"></script>
         <script src="js/three.min.js"></script>
@@ -52,7 +57,7 @@
         <script src="js/portal.js"></script>
         <script src="js/end.js"></script>
         <script src="js/levels.js"></script>
-        <script src = "js/levels/level1.txt"></script>
+        <script src="js/level2.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
