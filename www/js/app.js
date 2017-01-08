@@ -2,6 +2,9 @@ var cube, scene, camera, renderer, x;
 var cl=[], cv=[];
 var geometry, material, mesh, mesh2, mesh3;
 var group = new THREE.Object3D();
+var line_end = new THREE.Object3D();
+var end = new THREE.Object3D();
+var portal = new THREE.Object3D();
 var rect = new THREE.Object3D(),cnt=0;
 var fl=[],cnt=0;
 var projector = new THREE.Projector();
@@ -14,10 +17,13 @@ var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
 var movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
-
+var blue_portal = new THREE.Vector3(1,0.2,0);
+var level_complete = 0, end_size = 0;
 var main = function() {
 	init();
 	render_level();
+	create_portal();
+	create_end();
 	render();
 
 }
@@ -34,6 +40,7 @@ function movedown() {
 }
 function moveleft() {
 	movingstate = 3;
+	level_complete = 1;
 	playervelocity_x -= 1;
 
 }
@@ -73,6 +80,8 @@ function init() {
 
 
 	scene.add(group);
+	scene.add(portal);
+	scene.add(end);
 	camera.position.z = 3.5;
 
 }
@@ -121,7 +130,15 @@ function onMouseMove(e){
 	      new THREE.Vector3(0, 0, -1),
 	      new THREE.Vector3(-1, 0, -1),
 	      new THREE.Vector3(-1, 0, 0),
-	      new THREE.Vector3(-1, 0, 1)
+	      new THREE.Vector3(-1, 0, 1),
+	      new THREE.Vector3(0, 1, 1),
+	      new THREE.Vector3(1, 1, 1),
+	      new THREE.Vector3(1, 1, 0),
+	      new THREE.Vector3(1, 1, -1),
+	      new THREE.Vector3(0, 1, -1),
+	      new THREE.Vector3(-1, 1, -1),
+	      new THREE.Vector3(-1, 1, 0),
+	      new THREE.Vector3(-1, 1, 1),
 	    ];
 	    // And the "RayCaster", able to test for intersections
 	     var caster = new THREE.Raycaster();
@@ -214,8 +231,39 @@ function render() {
 				playervelocity_x += 0.02;
 	}
 
+	if(level_complete) {
+		end.remove(line_end);
+		end_size += 0.03;
+		end_size = Math.min(end_size, 0.8);
+
+		material = new THREE.LineBasicMaterial({
+			color: 0x000000,
+			linewidth: 5
+		});
+		geometry = new THREE.Geometry();
+		geometry.vertices.push(
+			new THREE.Vector3( end_size, 0.8, 0.005 ),
+			new THREE.Vector3( end_size, -0.8, 0.005 )
+		);
+		line = new THREE.LineSegments( geometry, material );
+		line_end.add(line);
+
+		material = new THREE.LineBasicMaterial({
+			color: 0x000000,
+			linewidth: 5
+		});
+		geometry = new THREE.Geometry();
+		geometry.vertices.push(
+			new THREE.Vector3( -end_size, 0.8, 0.005 ),
+			new THREE.Vector3( -end_size, -0.8, 0.005 )
+		);
+		line = new THREE.LineSegments( geometry, material );
+		line_end.add(line);
+		end.add(line_end);
+	}
+
 	if(cnt%70==0) {	// for adding a new square every second
-				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
+					var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var cube = new THREE.Mesh( geometry, material ); 
 				cube.userData = {vx:ass_x_v,vy:ass_y_v};
