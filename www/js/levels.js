@@ -151,7 +151,7 @@ function render_level() {
 
 	line.permanentx2= 4;
 	line.permanenty2 = -2.7;
-	laserobjects.push(line);
+	// laserobjects.push(line);
 	scene.add( line );
 
 	material = new THREE.LineBasicMaterial({
@@ -172,7 +172,7 @@ function render_level() {
 
 	line.permanentx2= -1.5;
 	line.permanenty2 = -2.85;
-	laserobjects.push(line);
+	// laserobjects.push(line);
 	scene.add( line );
 	// laserobjects.push(line);
 
