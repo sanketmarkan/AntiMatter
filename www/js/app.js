@@ -13,7 +13,7 @@ console.log(containerHeight);
 var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
-var movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
+var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 
 var main = function() {
 	init();
@@ -67,7 +67,7 @@ function init() {
 	// mesh = new THREE.Mesh( geometry, material );
 	// group.add (mesh);
 
-	group.position.set(-4,2.8,0.01);
+	group.position.set(-4,0.8,0.01);
 	group.scale.set( 0.2, 0.2, 1 );
 
 
@@ -218,7 +218,7 @@ function render() {
 				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var cube = new THREE.Mesh( geometry, material );
-				cube.userData = {vx:ass_x_v,vy:ass_y_v};
+				cube.userData = {vx:ass_x_v,vy:ass_y_v,cn:cnt};
 				cube.position.set(-4,2.8,0);
 				rect.add(cube);
 
@@ -266,6 +266,10 @@ function render() {
 			if(playervelocity_x<0)
 				rect.children[i].userData.vx*=-1;
 		}
+	}
+	if(cnt%1000==0) {
+		rect.remove(rect.children[0]);
+		rect.remove(rect.children[0]);
 	}
 	scene.add(rect);
 	cnt++;
