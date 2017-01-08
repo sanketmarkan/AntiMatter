@@ -128,7 +128,7 @@ function init() {
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
-
+window.add
 	function check_collision()
 	{
 		var rays = [
@@ -312,6 +312,10 @@ window.addEventListener( 'resize', onWindowResize, false);
 
 
 	}
+function level_up()
+{
+	changelevel = true;
+}
 
 function onWindowResize(){
 
@@ -406,8 +410,8 @@ function render() {
 	if(changelevel) {
 		level++;
 		if(level==2){
+			laserobjects = [];
 			init();
-			if(level==1) render_level();
 			if(level==2) render_level_2();
 			create_portal();
 			create_end();

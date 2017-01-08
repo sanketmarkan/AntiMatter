@@ -157,3 +157,9 @@ button{
     color: white;
     font-size: 15px;
 }
+
+#nextlevel{
+    position: fixed;;
+    top: 2%;
+    right: 5%;
+}

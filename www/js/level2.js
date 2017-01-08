@@ -1,6 +1,6 @@
 function render_level_2() {
 	var loader = new THREE.TextureLoader();
-	loader.load('img/index.jpeg',function(texture)
+	loader.load('img/level2.jpg',function(texture)
 		{
 			var geometry = new THREE.BoxGeometry( 12, 7, -0.01 );
 			 var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
