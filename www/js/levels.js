@@ -132,6 +132,50 @@ function render_level() {
 	scene.add (mesh);
 	collisionobjects.push(mesh);
 
+
+	var material = new THREE.LineBasicMaterial({
+	color: 0x0000ff,
+	linewidth: 3
+	});
+
+	var geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3( 4, 1.5, 0 ),
+		new THREE.Vector3( 4, -2.7, 0 )
+	);
+
+	var line = new THREE.LineSegments( geometry, material );
+	line.direction = 0;
+	line.permanentx1 = 4;
+	line.permanenty1 = 1.5;
+
+	line.permanentx2= 4;
+	line.permanenty2 = -2.7;
+	laserobjects.push(line);
+	scene.add( line );
+
+	material = new THREE.LineBasicMaterial({
+	color: 0x0000ff,
+	linewidth: 3
+	});
+
+	geometry = new THREE.Geometry();
+	geometry.vertices.push(
+		new THREE.Vector3( -1.5, 0, 0 ),
+		new THREE.Vector3( -1.5, -2.85, 0 )
+	);
+
+	line = new THREE.LineSegments( geometry, material );
+	line.direction = 1;
+	line.permanentx1 = -1.5;
+	line.permanenty1 = 0;
+
+	line.permanentx2= -1.5;
+	line.permanenty2 = -2.85;
+	laserobjects.push(line);
+	scene.add( line );
+	// laserobjects.push(line);
+
 	// geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.2 );
 	// material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
 	// mesh = new THREE.Mesh( geometry, material );
@@ -139,4 +183,4 @@ function render_level() {
 	// mesh.position.y = -2.5;
 	// scene.add (mesh);
 
-}
+};

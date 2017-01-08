@@ -13,6 +13,7 @@ console.log(containerHeight);
 var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
+var laserobjects = [];
 var movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 
 var main = function() {
@@ -74,6 +75,9 @@ function init() {
 
 	scene.add(group);
 	camera.position.z = 3.5;
+
+	console.log(laserobjects);
+	// console.log(laserobjects[0].verticies)
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
@@ -141,7 +145,7 @@ function onMouseMove(e){
 	      		{
 					group.position.x -= 0.1*playervelocity_x;
 					group.position.y -= 0.1*playervelocity_y;
-				  	console.log("HIT!");
+				  	// console.log("HIT!");
 				  	// console.log(playervelocity_x);
 				  	playervelocity_x = -playervelocity_x;
 				  	playervelocity_y = -playervelocity_y;
@@ -160,7 +164,7 @@ function onMouseMove(e){
 
 						rect.children[j].position.x -= 20*rect.children[j].userData.vx;
 						rect.children[j].position.y -= 20*rect.children[j].userData.vy;
-					  	console.log("HIT BLOCK!");
+					  	// console.log("HIT BLOCK!");
 					  	// console.log(playervelocity_x);
 					  	var t = rect.children[j].userData.vx; 
 					  	rect.children[j].userData.vx = -rect.children[j].userData.vy;
@@ -169,6 +173,113 @@ function onMouseMove(e){
 			      }
 		  	}
 		  }
+
+
+		  for (var i=0;i<laserobjects.length;i++) {
+		  	
+		  		// console.log(group.position.x);
+		  		// console.log(laserobjects[i].geometry.vertices[0].x);
+		  			// console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
+		  			var p_x1 = laserobjects[i].permanentx1;
+		  			var p_y1 = laserobjects[i].permanenty1;
+		  			var p_x2 = laserobjects[i].permanentx2;
+		  			var p_y2 = laserobjects[i].permanenty2;
+		  		if(group.position.x > laserobjects[i].geometry.vertices[0].x-0.1 && group.position.x < laserobjects[i].geometry.vertices[0].x+0.1) {
+		  			console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
+		  			var direction = laserobjects[i].direction;
+		  			var start_y,start_x;	
+		  			
+		  			// console.log(i);
+		  			// console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
+		  			if(direction==0)
+		  			{
+		  				start_x = laserobjects[i].permanentx1;
+		  				start_y = laserobjects[i].permanenty1;
+			  			console.log(start_x,start_y);
+		  			// console.log("SFDSDF");
+	  			} else
+		  			{
+		  				start_x = laserobjects[i].permanentx2;
+		  				start_y = laserobjects[i].permanenty2;
+		  			}
+		  			console.log(start_x,start_y);
+		  			console.log("hit ray")
+		  			scene.remove(laserobjects[i]);
+		  			var material = new THREE.LineBasicMaterial({
+					color: 0x0000ff,
+					linewidth: 3
+					});
+
+					var geometry = new THREE.Geometry();
+					geometry.vertices.push(
+						new THREE.Vector3( start_x, start_y, 0 ),
+						new THREE.Vector3( start_x, group.position.y, 0 )
+					);
+
+					var line = new THREE.LineSegments( geometry, material );
+					line.direction = direction;
+					console.log(i,p_x1,p_x2,p_y1,p_y2);
+					line.permanentx1 = p_x1;
+					line.permanenty1 = p_y1;
+					line.permanentx2 = p_x2;
+					line.permanenty2 = p_y2;
+					laserobjects[i] = line;
+					scene.add( laserobjects[i] );
+
+
+		  		}
+		  		else
+		  		{
+		  			scene.remove(laserobjects[i]);
+		  			var material = new THREE.LineBasicMaterial({
+					color: 0x0000ff,
+					linewidth: 3
+					});
+
+					var geometry = new THREE.Geometry();
+					geometry.vertices.push(
+						new THREE.Vector3( p_x1, p_y1, 0 ),
+						new THREE.Vector3( p_x2, p_y2, 0 )
+					);
+
+					var line = new THREE.LineSegments( geometry, material );
+					line.direction = direction;
+					// console.log(i,p_x1,p_x2,p_y1,p_y2);
+					line.permanentx1 = p_x1;
+					line.permanenty1 = p_y1;
+					line.permanentx2 = p_x2;
+					line.permanenty2 = p_y2;
+					laserobjects[i] = line;
+					scene.add( laserobjects[i] );
+
+		  		}
+
+		  }
+
+
+		  	for (var i=0;i<rect.children.length;i++) {
+		  		for (var j=0;j<laserobjects.length;j++) {
+		  			laser_y1 = laserobjects[j].geometry.vertices[0].y;
+		  			laser_y2 = laserobjects[j].geometry.vertices[1].y;
+		  			// console.log(laser_y1);
+		  			// console.log(laser_y2);
+
+		  			if (laserobjects[j].geometry.vertices[0].x-0.1 <  rect.children[i].position.x && laserobjects[j].geometry.vertices[0].x+0.1 > rect.children[i].position.x) {
+		  				// console.log("may hit")
+		  				if ((rect.children[i].position.y > laser_y1 && rect.children[i].position.y > laser_y2) || (rect.children[i].position.y < laser_y1 && rect.children[i].position.y < laser_y2))
+		  				{	
+		  					
+		  				} else
+		  				{
+		  					rect.remove(rect.children[i]);
+		  				}
+
+		  				}
+
+		  		}
+		  	}
+
+
 	    
 	}
 
