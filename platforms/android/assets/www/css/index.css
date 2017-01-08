@@ -113,3 +113,32 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+#up {
+    position: fixed;
+    bottom:9%;
+    left:6%;
+}
+
+#down {
+    position: fixed;
+    bottom: 2%;
+    left:6%;
+}
+
+#left {
+    position: fixed;
+    bottom: 2%;
+    left:2%;
+}
+ 
+#right {
+    position: fixed;
+    bottom: 2%;
+    left:10%;
+}
+button{
+    opacity :0.6;
+    padding: 10px 10px;
+    border-radius: 40px;
+}
