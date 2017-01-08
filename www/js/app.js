@@ -20,7 +20,7 @@ var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 
 var blue_portal = new THREE.Vector3(1,0.2,0);
 var level_complete = 0, end_size = 0;
-var col, tt = 0, change_color = 0;
+var col, tt = 0, change_color = 0,val = 100;
 var main = function() {
 	init();
 	render_level();
@@ -297,13 +297,18 @@ function render() {
 	}
 
 	if(cnt%270==0) {	// for adding a new square every second
-					var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
+				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v,cn:cnt};
 				cube.position.set(-4,2.8,0);
 				rect.add(cube);
+				$("#score").html(function()
+				{
+					val = val-1;
+					return "SCORE - " + val;
+				});
 
 		if(ass_x_v==0||ass_y_v==0)
 			fl_in_vel*=-1;
