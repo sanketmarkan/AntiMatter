@@ -20,7 +20,7 @@ var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 var level_complete = 0, end_size = 0;
 var level = 1;
 var px,py,ex,ey;
-var col, tt = 0, change_color = 0,val = 100;
+var col, tt = 0, change_color = 0,val = 100,changelevel=0;
 var main = function() {
 	scene = new THREE.Scene();
 	renderer = new THREE.WebGLRenderer();
@@ -86,12 +86,12 @@ function init() {
 	col = [0xff0000,0x0000ff];
 	x=0;
 	geometry = new THREE.RingGeometry( 1, 1.25, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: col[tt], side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add(mesh);
 
 	geometry = new THREE.RingGeometry( 0.001, 0.9, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0x0000ff, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: col[1-tt], side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add( mesh );
 
@@ -125,39 +125,6 @@ function init() {
 
 }
 window.addEventListener( 'resize', onWindowResize, false);
-window.addEventListener( 'mousemove', onMouseMove, false );
-
-function onMouseMove(e){
-
-	mouseVector.x = 2 * (e.clientX / containerWidth) - 1;
-	mouseVector.y = 1 - 2 * ( e.clientY / containerHeight );
-
-
-	//    projector.unprojectVector( mouseVector, camera );
-	// var raycaster = new THREE.Raycaster( camera.position, mouseVector.subSelf( camera.position ).normalize() );
-
-	// // create an array containing all objects in the scene with which the ray intersects
-	// var intersects = raycaster.intersectObjects( group.children );
-
-
-	//    var vector = mouseVector.clone().unproject( camera );
-	// var direction = new THREE.Vector3( 0, 0, -1 ).transformDirection( camera.matrixWorld );
-	// var raycaster = new THREE.Raycaster();
-	// raycaster.setFromCamera( mouseVector, camera );
-	// raycaster.set( vector, direction );
-	// console.log(group.children);
-	// raycaster.setFromCamera( mouseVector, camera );
-	// var intersects = raycaster.intersectObjects(group.children);
-
-	// console.log(intersects);
-
-	// intersection = intersects[0];
-	// obj = intersection.object;
-	// obj.material.color.setRGB( 1.0 - 1/ intersects.length, 0, 0 );
-
-
-
-}
 
 	function check_collision()
 	{
@@ -315,7 +282,9 @@ function render() {
 		line = new THREE.LineSegments( geometry, material );
 		line_end.add(line);
 		end.add(line_end);
+	}
 
+	if(changelevel) {
 		level++;
 		if(level==2){
 			init();
@@ -325,6 +294,7 @@ function render() {
 			create_end();
 			render();
 		}
+		changelevel = 0;
 	}
 
 	if(cnt%270==0) {	// for adding a new square every second
