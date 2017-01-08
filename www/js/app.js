@@ -19,6 +19,7 @@ var collisionobjects = [],levelobj = [];
 var movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 var blue_portal = new THREE.Vector3(1,0.2,0);
 var level_complete = 0, end_size = 0;
+var col, tt = 0, change_color = 0;
 var main = function() {
 	init();
 	render_level();
@@ -30,7 +31,6 @@ var main = function() {
 
 
 function moveup() {
-
 	movingstate = 1;
 	playervelocity_y += 1;
 }
@@ -52,15 +52,20 @@ function moveright() {
 function statezero() {
 	movingstate = 0;
 }
+
+function change() {
+	change_color = 1;
+}
 function init() {
 	scene = new THREE.Scene();
+	col = [0xff0000,0x00009f];
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	x=0;
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	document.body.appendChild( renderer.domElement );
 	geometry = new THREE.RingGeometry( 1, 1.25, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add(mesh);
 
@@ -205,17 +210,34 @@ function render() {
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
+	
+	if (change_color){
+		tt = 1-tt;
+		for( var i = group.children.length - 1; i >= 0; i--) { group.remove(group.children[i]);}
+		geometry = new THREE.RingGeometry( 1, 1.25, 32 );
+		material = new THREE.MeshBasicMaterial( { color: col[tt], side: THREE.DoubleSide } );
+		mesh = new THREE.Mesh( geometry, material );
+		group.add(mesh);
+
+		geometry = new THREE.RingGeometry( 0.001, 0.9, 32 );
+		material = new THREE.MeshBasicMaterial( { color: col[1-tt], side: THREE.DoubleSide } );
+		mesh = new THREE.Mesh( geometry, material );
+		group.add( mesh );
+		change_color  = 0;
+	}
+
 	group.remove(mesh2);
 	group.remove(mesh3);
 	geometry = new THREE.RingGeometry( z, 1.0, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: col[tt], side: THREE.DoubleSide } );
 	mesh2 = new THREE.Mesh( geometry, material );
 	group.add( mesh );
 	geometry = new THREE.RingGeometry( y, 1.2499, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: col[tt], side: THREE.DoubleSide } );
 	mesh3 = new THREE.Mesh( geometry, material );
 	group.add( mesh2 );
 	group.add ( mesh3 );
+
 
 	if(cnt%10) {	//for controlling the player's velocity
 		if(playervelocity_y>=0.02||playervelocity_y<=-0.02)
