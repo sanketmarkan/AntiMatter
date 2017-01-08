@@ -12,6 +12,7 @@ var containerHeight = container.clientHeight;
 console.log(containerHeight);
 var playervelocity_y = 0;
 var playervelocity_x = 0;
+var collisionobjects = [],levelobj = [];
 var movingstate = 0;
 
 var main = function() {
@@ -110,7 +111,63 @@ function onMouseMove(e){
 
 }
 
-
+function check_collision()
+{
+	var rays = [
+      new THREE.Vector3(0, 0, 1),
+      new THREE.Vector3(1, 0, 1),
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(1, 0, -1),
+      new THREE.Vector3(0, 0, -1),
+      new THREE.Vector3(-1, 0, -1),
+      new THREE.Vector3(-1, 0, 0),
+      new THREE.Vector3(-1, 0, 1)
+    ];
+    // And the "RayCaster", able to test for intersections
+     var caster = new THREE.Raycaster();
+     var caster2 = new THREE.Raycaster();
+     var collisions,coll2
+      // Maximum distance from the origin before we consider collision
+      distance = 0.2;
+      // Get the obstacles array from our world
+    // For each ray
+    for (var i = 0; i < rays.length; i++) {
+      // We reset the raycaster to this direction
+      caster.set(group.position, rays[i]);
+      caster2.set(group.position,rays[i]);
+      // Test if we intersect with any obstacle mesh
+      collisions = caster.intersectObjects(collisionobjects);
+      coll2 = caster2.intersectObjects(levelobj);
+      // And disable that direction if we do
+      if(coll2.length > 0 && coll2[0].distance <= distance)
+      {
+      	//To check if inside the yellow area or not
+      	// playervelocity_x = -playervelocity_x;
+      	// playervelocity_y = -playervelocity_y;
+      }
+      if (collisions.length > 0 && collisions[0].distance <= distance) {
+      	console.log("HIT!");
+      	console.log(playervelocity_x);
+      	playervelocity_x = -0.1*playervelocity_x;
+      	playervelocity_y = -0.1*playervelocity_y;
+      	console.log(playervelocity_x);
+        // Yep, this.rays[i] gives us : 0 => up, 1 => up-left, 2 => left, ...
+   //      if ((i === 0 || i === 1 || i === 7)) {
+   //        playervelocity_x = -playervelocity_x;
+   //        playervelocity_y = -playervelocity_y;
+   //      } else if ((i === 3 || i === 4 || i === 5)) {
+			// playervelocity_x = -playervelocity_x;
+	  //       playervelocity_y = -playervelocity_y;        }
+   //      if ((i === 1 || i === 2 || i === 3)) {
+   //        playervelocity_x = -playervelocity_x;
+   //        playervelocity_y = -playervelocity_y;
+   //      } else if ((i === 5 || i === 6 || i === 7)) {
+   //        playervelocity_x = -playervelocity_x;
+   //        playervelocity_y = -playervelocity_y;
+   //      }
+      }
+  }
+}
 
 function onWindowResize(){
 
@@ -121,6 +178,7 @@ function onWindowResize(){
 
 }
 function render() {
+	
 	requestAnimationFrame( render );
 	camera.position.x = group.position.x;
 	camera.position.y = group.position.y;
@@ -160,6 +218,7 @@ function render() {
 	group.position.x += playervelocity_x*(0.015);
 	group.position.y += playervelocity_y*(0.015);
 	renderer.render( scene, camera );
+	check_collision();
 	for(var i=0;i<rect.children.length;i++) {
 		scene.remove(rect.children[i]);
 	}

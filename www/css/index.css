@@ -142,3 +142,9 @@ button{
     padding: 10px 10px;
     border-radius: 40px;
 }
+#score
+{
+    position: fixed;
+    top: 2%;
+    left:10%;
+}
