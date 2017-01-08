@@ -17,7 +17,7 @@ var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
 var laserobjects = [];
-var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
+var rem=0,movingstate = 0,ass_x_v=0.02,ass_y_v=-0.02,fl_in_vel=0.002;
 var level_complete = 0, end_size = 0;
 var level = 1;
 var px,py,ex,ey;
@@ -234,7 +234,7 @@ function onMouseMove(e){
 
 
 		  for (var i=0;i<laserobjects.length;i++) {
-		  	
+
 		  		// console.log(group.position.x);
 		  		// console.log(laserobjects[i].geometry.vertices[0].x);
 		  			// console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
@@ -246,8 +246,8 @@ function onMouseMove(e){
 		  			if(tt==0){
 			  			console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
 			  			var direction = laserobjects[i].direction;
-			  			var start_y,start_x;	
-			  			
+			  			var start_y,start_x;
+
 			  			// console.log(i);
 			  			// console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
 			  			if(direction==0)
@@ -327,8 +327,8 @@ function onMouseMove(e){
 		  			if (laserobjects[j].geometry.vertices[0].x-0.2 <  rect.children[i].position.x && laserobjects[j].geometry.vertices[0].x+0.2 > rect.children[i].position.x) {
 		  				// console.log("may hit")
 		  				if ((rect.children[i].position.y > laser_y1 && rect.children[i].position.y > laser_y2) || (rect.children[i].position.y < laser_y1 && rect.children[i].position.y < laser_y2))
-		  				{	
-		  					
+		  				{
+
 		  				} else
 		  				{
 		  					if(rect.children[i].userData.mat==1) {
@@ -343,7 +343,7 @@ function onMouseMove(e){
 		  	}
 
 
-	    
+
 	}
 
 function onWindowResize(){
@@ -464,11 +464,11 @@ function render() {
 			fl_in_vel*=-1;
 				var geometry = new THREE.CubeGeometry( 0.2, 0.2, 0.02 );
 				if((cnt/270)%2==0)
-					
+
 					var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
 				else
 					var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-				
+
 				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v,mat:(cnt/270)%2};
 				cube.position.set(-4,2.8,0);
@@ -510,7 +510,7 @@ function render() {
 			if(playervelocity_x<0.01&&playervelocity_x>-0.01)
 				playervelocity_x = 0.01;
 		if(tx*tx+ty*ty < 0.2) {
-			if(tt==0) {
+			if(tt!=rect.children[i].userData.mat) {
 				rect.remove(rect.children[i]);
 			}
 			else {
@@ -524,7 +524,7 @@ function render() {
 			}
 		}
 	}
-	if(cnt%1000==0) {
+	if(cnt%4000==0) {
 		rect.remove(rect.children[0]);
 		rect.remove(rect.children[0]);
 	}
