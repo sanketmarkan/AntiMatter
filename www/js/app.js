@@ -146,10 +146,12 @@ function check_collision()
       	// playervelocity_y = -playervelocity_y;
       }
       if (collisions.length > 0 && collisions[0].distance <= distance) {
+				group.position.x -= 0.1*playervelocity_x;
+				group.position.y -= 0.1*playervelocity_y;
       	console.log("HIT!");
       	console.log(playervelocity_x);
-      	playervelocity_x = -0.1*playervelocity_x;
-      	playervelocity_y = -0.1*playervelocity_y;
+      	playervelocity_x = -playervelocity_x;
+      	playervelocity_y = -playervelocity_y;
       	console.log(playervelocity_x);
         // Yep, this.rays[i] gives us : 0 => up, 1 => up-left, 2 => left, ...
    //      if ((i === 0 || i === 1 || i === 7)) {
@@ -178,7 +180,7 @@ function onWindowResize(){
 
 }
 function render() {
-	
+
 	requestAnimationFrame( render );
 	camera.position.x = group.position.x;
 	camera.position.y = group.position.y;
