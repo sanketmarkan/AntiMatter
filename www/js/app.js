@@ -58,7 +58,7 @@ function change() {
 }
 function init() {
 	scene = new THREE.Scene();
-	col = [0xff0000,0x00009f];
+	col = [0xff0000,0x0000ff];
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	x=0;
 	renderer = new THREE.WebGLRenderer();
@@ -70,7 +70,7 @@ function init() {
 	group.add(mesh);
 
 	geometry = new THREE.RingGeometry( 0.001, 0.9, 32 );
-	material = new THREE.MeshBasicMaterial( { color: 0x00009f, side: THREE.DoubleSide } );
+	material = new THREE.MeshBasicMaterial( { color: 0x0000ff, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add( mesh );
 
