@@ -13,7 +13,7 @@ console.log(containerHeight);
 var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
-var movingstate = 0;
+var movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 
 var main = function() {
 	init();
@@ -39,7 +39,7 @@ function moveleft() {
 }
 function moveright() {
 	movingstate = 4;
-	playervelocity_x += 1;	
+	playervelocity_x += 1;
 }
 
 function statezero() {
@@ -61,7 +61,7 @@ function init() {
 	material = new THREE.MeshBasicMaterial( { color: 0x00009f, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
 	group.add( mesh );
-	
+
 	// geometry = new THREE.RingGeometry( 0.74, 0.8, 32 );
 	// material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide } );
 	// mesh = new THREE.Mesh( geometry, material );
@@ -69,7 +69,7 @@ function init() {
 
 	group.position.set(0,0,0.01);
 	group.scale.set( 0.2, 0.2, 1 );
-		
+
 
 
 	scene.add(group);
@@ -95,10 +95,10 @@ function onMouseMove(e){
 	//    var vector = mouseVector.clone().unproject( camera );
 	// var direction = new THREE.Vector3( 0, 0, -1 ).transformDirection( camera.matrixWorld );
 	// var raycaster = new THREE.Raycaster();
-	// raycaster.setFromCamera( mouseVector, camera ); 
+	// raycaster.setFromCamera( mouseVector, camera );
 	// raycaster.set( vector, direction );
 	// console.log(group.children);
-	// raycaster.setFromCamera( mouseVector, camera ); 
+	// raycaster.setFromCamera( mouseVector, camera );
 	// var intersects = raycaster.intersectObjects(group.children);
 
 	// console.log(intersects);
@@ -197,20 +197,51 @@ function render() {
 	group.add( mesh2 );
 	group.add ( mesh3 );
 
-	if(cnt%70==0) {
+	if(cnt%10) {	//for controlling the player's velocity
+		if(playervelocity_y>=0.02||playervelocity_y<=-0.02)
+			if(playervelocity_y>0)
+				playervelocity_y -= 0.02;
+			else
+				playervelocity_y += 0.02;
+
+		if(playervelocity_x>=0.02||playervelocity_x<=-0.02)
+			if(playervelocity_x>0)
+				playervelocity_x -= 0.02;
+			else
+				playervelocity_x += 0.02;
+	}
+
+	if(cnt%70==0) {	// for adding a new square every second
 		geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 		material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 		cube = new THREE.Mesh( geometry, material );
+		cube.userData = {vx:ass_x_v,vy:ass_y_v};
+		cube.position.set(-3.5,2.8,0);
 		rect.add(cube);
 
+		if(ass_x_v==0||ass_y_v==0)
+			fl_in_vel*=-1;
 		geometry = new THREE.CubeGeometry( 0.2, 0.2, 0.02 );
 		material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 		cube = new THREE.Mesh( geometry, material );
+		cube.userData = {vx:ass_x_v,vy:ass_y_v};
+		cube.position.set(-3.5,2.8,0);
 		rect.add(cube);
+
+		ass_x_v += fl_in_vel;
+		ass_y_v += fl_in_vel;
 	}
 	for(var i=0;i<rect.children.length;i++) {
-		rect.children[i].position.x += 0.01;
-		rect.children[i].position.y += 0.01;
+		rect.children[i].position.x += rect.children[i].userData.vx;
+		rect.children[i].position.y += rect.children[i].userData.vy;
+		if (rect.children[i].userData.vx >= 0.000003)
+			rect.children[i].userData.vx -= 0.000003;
+		if (rect.children[i].userData.vx <= -0.000003)
+			rect.children[i].userData.vx += 0.000003;
+		if (rect.children[i].userData.vy >= 0.000003)
+			rect.children[i].userData.vy -= 0.000003;
+		if (rect.children[i].userData.vy <= 0.000003)
+			rect.children[i].userData.vy += 0.000003;
 		rect.children[i].rotation.z += 0.01;
 	}
 	scene.add(rect);
@@ -223,4 +254,3 @@ function render() {
 		scene.remove(rect.children[i]);
 	}
 }
-
