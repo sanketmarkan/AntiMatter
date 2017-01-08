@@ -16,6 +16,7 @@ console.log(containerHeight);
 var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
+var laserobjects = [];
 var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
 var level_complete = 0, end_size = 0;
 var level = 1;
@@ -230,6 +231,119 @@ function onMouseMove(e){
 		  	}
 		  }
 
+
+
+		  for (var i=0;i<laserobjects.length;i++) {
+		  	
+		  		// console.log(group.position.x);
+		  		// console.log(laserobjects[i].geometry.vertices[0].x);
+		  			// console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
+		  			var p_x1 = laserobjects[i].permanentx1;
+		  			var p_y1 = laserobjects[i].permanenty1;
+		  			var p_x2 = laserobjects[i].permanentx2;
+		  			var p_y2 = laserobjects[i].permanenty2;
+		  		if(group.position.x > laserobjects[i].geometry.vertices[0].x-0.2 && group.position.x < laserobjects[i].geometry.vertices[0].x+0.2) {
+		  			if(tt==0){
+			  			console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
+			  			var direction = laserobjects[i].direction;
+			  			var start_y,start_x;	
+			  			
+			  			// console.log(i);
+			  			// console.log(i,laserobjects[i].permanentx1,laserobjects[i].permanenty1);
+			  			if(direction==0)
+			  			{
+			  				start_x = laserobjects[i].permanentx1;
+			  				start_y = laserobjects[i].permanenty1;
+				  			console.log(start_x,start_y);
+			  			// console.log("SFDSDF");
+			  			}
+	  				 else
+		  			{
+		  				start_x = laserobjects[i].permanentx2;
+		  				start_y = laserobjects[i].permanenty2;
+		  			}
+		  			console.log(start_x,start_y);
+		  			console.log("hit ray")
+		  			scene.remove(laserobjects[i]);
+		  			var material = new THREE.LineBasicMaterial({
+					color: 0xff0000,
+					linewidth: 3
+					});
+
+					var geometry = new THREE.Geometry();
+					geometry.vertices.push(
+						new THREE.Vector3( start_x, start_y, 0 ),
+						new THREE.Vector3( start_x, group.position.y, 0 )
+					);
+
+					var line = new THREE.LineSegments( geometry, material );
+					line.direction = direction;
+					console.log(i,p_x1,p_x2,p_y1,p_y2);
+					line.permanentx1 = p_x1;
+					line.permanenty1 = p_y1;
+					line.permanentx2 = p_x2;
+					line.permanenty2 = p_y2;
+					laserobjects[i] = line;
+					scene.add( laserobjects[i] );
+
+				}
+		  		}
+		  		else
+		  		{
+		  			scene.remove(laserobjects[i]);
+		  			var material = new THREE.LineBasicMaterial({
+					color: 0xff0000,
+					linewidth: 3
+					});
+
+					var geometry = new THREE.Geometry();
+					geometry.vertices.push(
+						new THREE.Vector3( p_x1, p_y1, 0 ),
+						new THREE.Vector3( p_x2, p_y2, 0 )
+					);
+
+					var line = new THREE.LineSegments( geometry, material );
+					line.direction = direction;
+					// console.log(i,p_x1,p_x2,p_y1,p_y2);
+					line.permanentx1 = p_x1;
+					line.permanenty1 = p_y1;
+					line.permanentx2 = p_x2;
+					line.permanenty2 = p_y2;
+					laserobjects[i] = line;
+					scene.add( laserobjects[i] );
+
+		  		}
+
+		  }
+
+
+		  	for (var i=0;i<rect.children.length;i++) {
+		  		for (var j=0;j<laserobjects.length;j++) {
+		  			laser_y1 = laserobjects[j].geometry.vertices[0].y;
+		  			laser_y2 = laserobjects[j].geometry.vertices[1].y;
+		  			// console.log(laser_y1);
+		  			// console.log(laser_y2);
+
+		  			if (laserobjects[j].geometry.vertices[0].x-0.2 <  rect.children[i].position.x && laserobjects[j].geometry.vertices[0].x+0.2 > rect.children[i].position.x) {
+		  				// console.log("may hit")
+		  				if ((rect.children[i].position.y > laser_y1 && rect.children[i].position.y > laser_y2) || (rect.children[i].position.y < laser_y1 && rect.children[i].position.y < laser_y2))
+		  				{	
+		  					
+		  				} else
+		  				{
+		  					if(rect.children[i].userData.mat==1) {
+
+		  					rect.remove(rect.children[i]);
+							}
+		  				}
+
+		  				}
+
+		  		}
+		  	}
+
+
+	    
 	}
 
 function onWindowResize(){
@@ -337,7 +451,7 @@ function render() {
 				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 				var cube = new THREE.Mesh( geometry, material );
-				cube.userData = {vx:ass_x_v,vy:ass_y_v,cn:cnt};
+				cube.userData = {vx:ass_x_v,vy:ass_y_v,mat:(cnt/270)%2};
 				cube.position.set(-4,2.8,0);
 				rect.add(cube);
 				$("#score").html(function()
@@ -349,9 +463,14 @@ function render() {
 		if(ass_x_v==0||ass_y_v==0)
 			fl_in_vel*=-1;
 				var geometry = new THREE.CubeGeometry( 0.2, 0.2, 0.02 );
-				var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+				if((cnt/270)%2==0)
+					
+					var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+				else
+					var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
+				
 				var cube = new THREE.Mesh( geometry, material );
-				cube.userData = {vx:ass_x_v,vy:ass_y_v};
+				cube.userData = {vx:ass_x_v,vy:ass_y_v,mat:(cnt/270)%2};
 				cube.position.set(-4,2.8,0);
 				rect.add(cube);
 		ass_x_v += fl_in_vel;
@@ -377,7 +496,7 @@ function render() {
 			rect.children[i].userData.vy = 0.1;
 		}
 		var tx = (rect.children[i].position.x-group.position.x),ty = (rect.children[i].position.y-group.position.y);
-		var te1=rect.children[i].position.x-4,te2=rect.children[i].position.y+2;
+		var te1=rect.children[i].position.x-4.5,te2=rect.children[i].position.y+2;
 		if(Math.sqrt(te1*te1+te2*te2)<0.4) {
 			level_complete = 1;
 			rect.remove(rect.children[i]);
