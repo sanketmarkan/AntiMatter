@@ -137,7 +137,7 @@ function onMouseMove(e){
 	      // Test if we intersect with any obstacle mesh
 	      collisions = caster.intersectObjects(collisionobjects);
 
-	      if (collisions.length > 0 && collisions[0].distance <= distance) 
+	      if (collisions.length > 0 && collisions[0].distance <= distance)
 	      		{
 					group.position.x -= 0.1*playervelocity_x;
 					group.position.y -= 0.1*playervelocity_y;
@@ -162,14 +162,14 @@ function onMouseMove(e){
 						rect.children[j].position.y -= 20*rect.children[j].userData.vy;
 					  	console.log("HIT BLOCK!");
 					  	// console.log(playervelocity_x);
-					  	var t = rect.children[j].userData.vx; 
+					  	var t = rect.children[j].userData.vx;
 					  	rect.children[j].userData.vx = -rect.children[j].userData.vy;
 					  	rect.children[j].userData.vy = t;
 					  	// console.log(rect.children[j].userData.vy);
 			      }
 		  	}
 		  }
-	    
+
 	}
 
 function onWindowResize(){
@@ -214,10 +214,10 @@ function render() {
 				playervelocity_x += 0.02;
 	}
 
-	if(cnt%70==0) {	// for adding a new square every second
+	if(cnt%370==0) {	// for adding a new square every second
 				var geometry = new THREE.CubeGeometry( 0.24, 0.24, 0.019 );
 				var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-				var cube = new THREE.Mesh( geometry, material ); 
+				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v};
 				cube.position.set(-4,2.8,0);
 				rect.add(cube);
@@ -226,10 +226,10 @@ function render() {
 			fl_in_vel*=-1;
 				var geometry = new THREE.CubeGeometry( 0.2, 0.2, 0.02 );
 				var material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-				var cube = new THREE.Mesh( geometry, material ); 
+				var cube = new THREE.Mesh( geometry, material );
 				cube.userData = {vx:ass_x_v,vy:ass_y_v};
 				cube.position.set(-4,2.8,0);
-				rect.add(cube);		
+				rect.add(cube);
 		ass_x_v += fl_in_vel;
 		ass_y_v += fl_in_vel;
 	}
@@ -247,6 +247,26 @@ function render() {
 		rect.children[i].rotation.z += 0.01;
 	}
 	check_collision();
+	for(var i=0;i<rect.children.length;i++) {
+		if(rect.children[i].userData.vx>0.2||rect.children[i].userData.vy>0.2||rect.children[i].userData.vx<-0.2||rect.children[i].userData.vy<-0.2) {
+			rect.children[i].userData.vx = 0.1;
+			rect.children[i].userData.vy = 0.1;
+		}
+		var tx = (rect.children[i].position.x-group.position.x),ty = (rect.children[i].position.y-group.position.y);
+		if(playervelocity_y<0.01&&playervelocity_y>-0.01)
+			playervelocity_y = 0.01;
+			if(playervelocity_x<0.01&&playervelocity_x>-0.01)
+				playervelocity_x = 0.01;
+		if(tx*tx+ty*ty < 0.2) {
+			tot = 0.015;
+			rect.children[i].userData.vx = tot*(playervelocity_x)/(playervelocity_x+playervelocity_y);
+			rect.children[i].userData.vy = tot*(playervelocity_y)/(playervelocity_x+playervelocity_y);
+			if(playervelocity_y<0)
+				rect.children[i].userData.vy*=-1;
+			if(playervelocity_x<0)
+				rect.children[i].userData.vx*=-1;
+		}
+	}
 	scene.add(rect);
 	cnt++;
 	group.position.x += playervelocity_x*(0.015);
