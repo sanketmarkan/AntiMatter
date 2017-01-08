@@ -17,17 +17,22 @@ var playervelocity_y = 0;
 var playervelocity_x = 0;
 var collisionobjects = [],levelobj = [];
 var rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
-
-var blue_portal = new THREE.Vector3(1,0.2,0);
 var level_complete = 0, end_size = 0;
+var level = 1;
+var px,py,ex,ey;
 var col, tt = 0, change_color = 0,val = 100;
 var main = function() {
+	scene = new THREE.Scene();
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	document.body.appendChild( renderer.domElement );
 	init();
-	render_level();
+	if(level==1) render_level();
+	if(level==2) render_level_2();
 	create_portal();
 	create_end();
 	render();
-
 }
 
 
@@ -41,7 +46,6 @@ function movedown() {
 }
 function moveleft() {
 	movingstate = 3;
-	level_complete = 1;
 	playervelocity_x -= 1;
 
 }
@@ -58,14 +62,31 @@ function change() {
 	change_color = 1;
 }
 function init() {
-	scene = new THREE.Scene();
+
+
+	cl=[], cv=[];
+	group = new THREE.Object3D();
+	line_end = new THREE.Object3D();
+	end = new THREE.Object3D();
+	portal = new THREE.Object3D();
+	rect = new THREE.Object3D(),cnt=0;
+	fl=[],cnt=0;
+	projector = new THREE.Projector();
+	playervelocity_y = 0;
+	playervelocity_x = 0;
+	collisionobjects = [],levelobj = [];
+	rem=0,movingstate = 0,ass_x_v=0.01,ass_y_v=-0.01,fl_in_vel=0.002;
+
+	if(scene) {
+		for(var i = scene.children.length-1;i>=0;i--){
+			scene.remove(scene.children[i]);
+		}
+	}
+
 	col = [0xff0000,0x0000ff];
 	document.getElementById('trigger-activate-audio').play();
 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 	x=0;
-	renderer = new THREE.WebGLRenderer();
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	document.body.appendChild( renderer.domElement );
 	geometry = new THREE.RingGeometry( 1, 1.25, 32 );
 	material = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.DoubleSide } );
 	mesh = new THREE.Mesh( geometry, material );
@@ -89,6 +110,7 @@ function init() {
 	scene.add(group);
 	scene.add(portal);
 	scene.add(end);
+	px=portal.position.x,py=portal.position.y,ex=end.position.x,ey=end.position.y;
 	camera.position.z = 3.5;
 
 	geometry = new THREE.RingGeometry( 0.2, 0.35, 32 );
@@ -226,7 +248,7 @@ function render() {
 	x = (x+20)%200;
 	var s = Math.min(x,200-x);
 	var y = 1.25+s/1000.0, z = 1-s/1000.0;
-	
+
 	if (change_color){
 		tt = 1-tt;
 		for( var i = group.children.length - 1; i >= 0; i--) { group.remove(group.children[i]);}
@@ -298,6 +320,16 @@ function render() {
 		line = new THREE.LineSegments( geometry, material );
 		line_end.add(line);
 		end.add(line_end);
+
+		level++;
+		if(level==2){
+			init();
+			if(level==1) render_level();
+			if(level==2) render_level_2();
+			create_portal();
+			create_end();
+			render();
+		}
 	}
 
 	if(cnt%270==0) {	// for adding a new square every second
@@ -345,18 +377,32 @@ function render() {
 			rect.children[i].userData.vy = 0.1;
 		}
 		var tx = (rect.children[i].position.x-group.position.x),ty = (rect.children[i].position.y-group.position.y);
+		var te1=rect.children[i].position.x-4,te2=rect.children[i].position.y+2;
+		if(Math.sqrt(te1*te1+te2*te2)<0.4) {
+			level_complete = 1;
+			rect.remove(rect.children[i]);
+		}
+		var te1=group.position.x-ex,te2=group.position.y-ey;
+		if(level_complete && Math.sqrt(te1*te1+te2*te2)<0.2) {
+			console.log("complete");
+		}
 		if(playervelocity_y<0.01&&playervelocity_y>-0.01)
 			playervelocity_y = 0.01;
 			if(playervelocity_x<0.01&&playervelocity_x>-0.01)
 				playervelocity_x = 0.01;
 		if(tx*tx+ty*ty < 0.2) {
-			tot = 0.015;
-			rect.children[i].userData.vx = tot*(playervelocity_x)/(playervelocity_x+playervelocity_y);
-			rect.children[i].userData.vy = tot*(playervelocity_y)/(playervelocity_x+playervelocity_y);
-			if(playervelocity_y<0)
-				rect.children[i].userData.vy*=-1;
-			if(playervelocity_x<0)
-				rect.children[i].userData.vx*=-1;
+			if(tt==0) {
+				rect.remove(rect.children[i]);
+			}
+			else {
+				tot = 0.015;
+				rect.children[i].userData.vx = tot*(playervelocity_x)/(playervelocity_x+playervelocity_y);
+				rect.children[i].userData.vy = tot*(playervelocity_y)/(playervelocity_x+playervelocity_y);
+				if(playervelocity_y<0)
+					rect.children[i].userData.vy*=-1;
+				if(playervelocity_x<0)
+					rect.children[i].userData.vx*=-1;
+			}
 		}
 	}
 	if(cnt%1000==0) {
