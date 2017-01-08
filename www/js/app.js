@@ -111,65 +111,64 @@ function onMouseMove(e){
 
 }
 
-function check_collision()
-{
-	var rays = [
-      new THREE.Vector3(0, 0, 1),
-      new THREE.Vector3(1, 0, 1),
-      new THREE.Vector3(1, 0, 0),
-      new THREE.Vector3(1, 0, -1),
-      new THREE.Vector3(0, 0, -1),
-      new THREE.Vector3(-1, 0, -1),
-      new THREE.Vector3(-1, 0, 0),
-      new THREE.Vector3(-1, 0, 1)
-    ];
-    // And the "RayCaster", able to test for intersections
-     var caster = new THREE.Raycaster();
-     var caster2 = new THREE.Raycaster();
-     var collisions,coll2
-      // Maximum distance from the origin before we consider collision
-      distance = 0.2;
-      // Get the obstacles array from our world
-    // For each ray
-    for (var i = 0; i < rays.length; i++) {
-      // We reset the raycaster to this direction
-      caster.set(group.position, rays[i]);
-      caster2.set(group.position,rays[i]);
-      // Test if we intersect with any obstacle mesh
-      collisions = caster.intersectObjects(collisionobjects);
-      coll2 = caster2.intersectObjects(levelobj);
-      // And disable that direction if we do
-      if(coll2.length > 0 && coll2[0].distance <= distance)
-      {
-      	//To check if inside the yellow area or not
-      	// playervelocity_x = -playervelocity_x;
-      	// playervelocity_y = -playervelocity_y;
-      }
-      if (collisions.length > 0 && collisions[0].distance <= distance) {
-				group.position.x -= 0.1*playervelocity_x;
-				group.position.y -= 0.1*playervelocity_y;
-      	console.log("HIT!");
-      	console.log(playervelocity_x);
-      	playervelocity_x = -playervelocity_x;
-      	playervelocity_y = -playervelocity_y;
-      	console.log(playervelocity_x);
-        // Yep, this.rays[i] gives us : 0 => up, 1 => up-left, 2 => left, ...
-   //      if ((i === 0 || i === 1 || i === 7)) {
-   //        playervelocity_x = -playervelocity_x;
-   //        playervelocity_y = -playervelocity_y;
-   //      } else if ((i === 3 || i === 4 || i === 5)) {
-			// playervelocity_x = -playervelocity_x;
-	  //       playervelocity_y = -playervelocity_y;        }
-   //      if ((i === 1 || i === 2 || i === 3)) {
-   //        playervelocity_x = -playervelocity_x;
-   //        playervelocity_y = -playervelocity_y;
-   //      } else if ((i === 5 || i === 6 || i === 7)) {
-   //        playervelocity_x = -playervelocity_x;
-   //        playervelocity_y = -playervelocity_y;
-   //      }
-      }
-  }
-}
+	function check_collision()
+	{
+		var rays = [
+	      new THREE.Vector3(0, 0, 1),
+	      new THREE.Vector3(1, 0, 1),
+	      new THREE.Vector3(1, 0, 0),
+	      new THREE.Vector3(1, 0, -1),
+	      new THREE.Vector3(0, 0, -1),
+	      new THREE.Vector3(-1, 0, -1),
+	      new THREE.Vector3(-1, 0, 0),
+	      new THREE.Vector3(-1, 0, 1)
+	    ];
+	    // And the "RayCaster", able to test for intersections
+	     var caster = new THREE.Raycaster();
+	     var caster2 = new THREE.Raycaster();
+	     var collisions,coll2
+	      // Maximum distance from the origin before we consider collision
+	      distance = 0.2;
+	      // Get the obstacles array from our world
+	    // For each ray
+	    for (var i = 0; i < rays.length; i++) {
+	      // We reset the raycaster to this direction
+	      caster.set(group.position, rays[i]);
+	      // Test if we intersect with any obstacle mesh
+	      collisions = caster.intersectObjects(collisionobjects);
+
+	      if (collisions.length > 0 && collisions[0].distance <= distance) 
+	      		{
+					group.position.x -= 0.1*playervelocity_x;
+					group.position.y -= 0.1*playervelocity_y;
+				  	console.log("HIT!");
+				  	// console.log(playervelocity_x);
+				  	playervelocity_x = -playervelocity_x;
+				  	playervelocity_y = -playervelocity_y;
+				  	// console.log(playervelocity_x);
+				}
+		}
+	   //  for (var i = 0; i < rays.length; i++)
+	   //    {
+	   //    	for(var j = 0;j<rect.children.length;j++)
+	   //    	{// We reset the raycaster to this direction
+	   //    		caster2.set(rect.children[j].position,rays[i]);
+	   //    		// Test if we intersect with any obstacle mesh
+				//   coll2 = caster2.intersectObjects(collisionobjects);
+				//   // And disable that direction if we do
+				//   if (coll2.length > 0 && coll2[0].distance <= distance) {
+				// 		rect.children[j].position.x -= 0.1*rect.children[j].userData.vx;
+				// 		rect.children[j].position.y -= 0.1*rect.children[j].userData.vy;
+				// 	  	// console.log("HIT BLOCK!");
+				// 	  	// console.log(playervelocity_x);
+				// 	  	rect.children[j].userData.vx = -rect.children[j].userData.vx;
+				// 	  	rect.children[j].userData.vy = -rect.children[j].userData.vy;
+				// 	  	// console.log(rect.children[j].userData.vy);
+			 //      }
+		  // 	}
+		  // }
+	    
+	}
 
 function onWindowResize(){
 
@@ -218,7 +217,7 @@ function render() {
 		material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
 		cube = new THREE.Mesh( geometry, material );
 		cube.userData = {vx:ass_x_v,vy:ass_y_v};
-		cube.position.set(-3.5,2.8,0);
+		cube.position.set(-4,2.8,0);
 		rect.add(cube);
 
 		if(ass_x_v==0||ass_y_v==0)
@@ -227,7 +226,7 @@ function render() {
 		material = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 		cube = new THREE.Mesh( geometry, material );
 		cube.userData = {vx:ass_x_v,vy:ass_y_v};
-		cube.position.set(-3.5,2.8,0);
+		cube.position.set(-4,2.8,0);
 		rect.add(cube);
 
 		ass_x_v += fl_in_vel;
